@@ -22,7 +22,7 @@ var User = mongoose.model("User", userSchema);
 const PORT = process.env.PORT || 5000;
 
 
-// Setup API
+// Setup API, static files visible at URL ('/assets')
 app.use(express.static(__dirname+'/public'));
 
 var applicationController = require('./controllers/applicationController');
