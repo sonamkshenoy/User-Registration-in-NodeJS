@@ -49,30 +49,42 @@ module.exports = function(app, User){
       console.log(`Save of ${ req.body['name'] } is successful`);
 
       // Send mail
-      const message = {
-          from: process.env.EMAIL_ID, // Sender address
-          to: req.body['emailID'],         // List of recipients
-          subject: 'Application Successful!', // Subject line
-          // text: 'Congrats!' // Plain text body
-          html: '<h1>Congrats ' + req.body['name'] + '!! Application successful!</h1>\
-          <p> Hope you have a really great time with us!</p>'
-      };
-      transport.sendMail(message, function(err, info) {
-          if (err) {
-            console.log(err)
-          } else {
-            console.log(info);
-          }
-      });
+      // const message = {
+      //     from: process.env.EMAIL_ID, // Sender address
+      //     to: req.body['emailID'],         // List of recipients
+      //     subject: 'Application Successful!', // Subject line
+      //     // text: 'Congrats!' // Plain text body
+      //     html: '<h1>Congrats ' + req.body['name'] + '!! Application successful!</h1>\
+      //     <p> Hope you have a really great time with us!</p>'
+      // };
+      // transport.sendMail(message, function(err, info) {
+      //     if (err) {
+      //       console.log(err)
+      //     } else {
+      //       console.log(info);
+      //     }
+      // });
 
       // send message (comment if not required, $1 per sms)
-      client.messages
-        .create({
-           body: 'Hey '+ req.body['name']+'! Your application is successful!',
-           from: process.env.PHONE_NUMBER,
-           to: `${ req.body['phoneNumber'] }`
-         })
-        .then(message => console.log(message.sid));
+      // client.messages
+      //   .create({
+      //      body: 'Hey '+ req.body['name']+'! Your application is successful!',
+      //      from: process.env.PHONE_NUMBER,
+      //      to: `${ req.body['phoneNumber'] }`
+      //    })
+      //   .then(message => console.log(message.sid));
+
+        // Printing all users till now
+        newUser.save(function(err){
+          if(err){
+               console.log(err);
+               return;
+          }
+        });
+        User.find({}).exec(function(err, result){
+          if(!err)
+           console.log(result);
+        });
 
       // response page
       // res.sendFile(path.join(__dirname, '../public/assets/html/success.html'));
@@ -82,17 +94,7 @@ module.exports = function(app, User){
       res.status(400).send("Unsuccessful application");
     });
 
-    // Printing all users till now
-    // newUser.save(function(err){
-    //   if(err){
-    //        console.log(err);
-    //        return;
-    //   }
-    // });
-    // User.find({}).exec(function(err, result){
-    //   if(!err)
-    //    console.log(result);
-    // });
+
     // res.sendFile(path.join(__dirname, '../public/assets/html/success.html'));
 
   });
